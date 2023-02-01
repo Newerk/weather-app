@@ -51,6 +51,7 @@ body {
     padding-left: 1rem;
     padding-right: 2rem;
     border-style: double;
+
 }
 
 .search::after {
@@ -61,6 +62,18 @@ body {
     top: .25rem;
     height: 1.2rem;
     width: 1.2rem;
+}
+
+#search-btn {
+    width: 2.2rem;
+    height: 1.85rem;
+    position: absolute;
+    z-index: 5;
+    margin-left: -2.4rem;
+    border-radius: 0 1rem 1rem 0;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+    border-style: none;
 }
 
 h2 {
