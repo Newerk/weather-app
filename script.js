@@ -9,15 +9,21 @@ const delay = (time) => {
 
 
 const searchBar = document.getElementById('search-bar');
+searchBar.addEventListener('click', () => {
+    searchBar.value = "";
+})
 searchBar.addEventListener('keypress', e => {
     if (e.key === 'Enter') {
-        // getApiLocationData(searchBar.value).then(data => console.log(data))
         document.querySelector('.search').classList.add('reposition');
         document.getElementById('content-title').style.visibility = 'hidden';
-        document.getElementById('header-title').style.opacity = 1;
-        delay(100).then(() => {
-            document.querySelector('.header').setAttribute('style', 'background-color: coral')
-        });
+        delay(100)
+            .then(() => {
+                document.querySelector('.header').setAttribute('style', 'background-color: coral')
+            })
+            .then(() => document.getElementById('header-title').style.opacity = 1);
+        searchBar.blur();
+
+        return getApiLocationData(searchBar.value).then(data => console.log(data));
     }
 })
 

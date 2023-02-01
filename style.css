@@ -18,6 +18,7 @@ body {
 /* will unhide once a location is searched*/
 #header-title {
     opacity: 0;
+    transition: 400ms;
 }
 
 .content {
@@ -49,6 +50,7 @@ body {
     width: 20rem;
     padding-left: 1rem;
     padding-right: 2rem;
+    border-style: double;
 }
 
 .search::after {
