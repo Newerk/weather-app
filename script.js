@@ -4,25 +4,31 @@ const searchWrapper = document.querySelector('.search');
 const searchBar = document.getElementById('search-bar');
 const searchBtn = document.getElementById('search-btn');
 
+const content = document.querySelector('.content');
+
 const delay = (time) => {
     return new Promise(resolve => {
         setTimeout(resolve, time)
     })
 }
 
+searchBar.addEventListener('click', () => {
+    searchBar.value = "";
+})
+
 searchBtn.addEventListener('click', (e) => {
     if (searchBar.value !== "" && searchBar.value !== "Search Location") {
         updateContentArea();
-    }
-})
+        console.log(getApiLocationData(searchBar.value).then(loadWeatherInformation()))
 
-searchBar.addEventListener('click', () => {
-    searchBar.value = "";
+    }
 })
 
 searchBar.addEventListener('keypress', e => {
     if (e.key === 'Enter') {
         updateContentArea();
+        console.log(getApiLocationData(searchBar.value).then(loadWeatherInformation()))
+
     }
 })
 
@@ -30,10 +36,10 @@ searchBar.addEventListener('keypress', e => {
 function updateContentArea() {
     if (!searchWrapper.classList.contains('reposition')) {
         searchWrapper.classList.add('reposition');
-        document.getElementById('content-title').style.visibility = 'hidden';
+        document.querySelector('.search').setAttribute('style', 'height: 0');
+        document.querySelector('h2').remove();
+        content.setAttribute('style', 'padding: 1rem 1rem 1rem 1rem;');
         updateHeader();
-
-        return getApiLocationData(searchBar.value).then(data => console.log(data));
     }
 }
 
@@ -42,7 +48,9 @@ function updateHeader() {
         .then(() => {
             document.querySelector('.header').setAttribute('style', 'background-color: coral')
         })
-        .then(() => document.getElementById('header-title').style.opacity = 1);
+        .then(() => {
+            document.getElementById('header-title').style.opacity = 1
+        });
     searchBar.blur();
 }
 
@@ -52,7 +60,23 @@ async function getApiLocationData(users_search) {
     return weatherData;
 }
 
-//plays while waiting for api information to load, and stops AFTER the information is returned
-async function loadingAnimation() {
+//gathers all the object properties I want to use from the data loaded from the openweathermap API
+async function loadWeatherInformation() {
+    const deg = '\u{00B0}'; //degrees in unicode
+
+    let getLocation = await getApiLocationData(searchBar.value)
+        .then((data) => console.log(`${data.name}`));
+
+    let getTemp = await getApiLocationData(searchBar.value)
+        .then((data) => console.log(`Temperature is: ${data.main.temp}${deg}`));
+
+    let getFeelsLike = await getApiLocationData(searchBar.value)
+        .then((data) => console.log(`Feels like: ${data.main.feels_like}${deg}`));
+
+    let getHumidity = await getApiLocationData(searchBar.value)
+        .then((data) => console.log(`Humidity: ${data.main.humidity}`));
 
 };
+
+//plays while waiting for loadWeatherInformation() to finish gathering all the date, and stops AFTER the information is returned
+async function playLoadingAnimation() {}
