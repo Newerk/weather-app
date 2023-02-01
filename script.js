@@ -38,7 +38,7 @@ function updateContentArea() {
         searchWrapper.classList.add('reposition');
         document.querySelector('.search').setAttribute('style', 'height: 0');
         document.querySelector('h2').remove();
-        content.setAttribute('style', 'padding: 1rem 1rem 1rem 1rem;');
+        content.setAttribute('style', 'display: grid; grid-template-rows: 4rem 1fr; padding: 1rem 1rem 1rem 1rem;');
         updateHeader();
     }
 }
@@ -46,10 +46,10 @@ function updateContentArea() {
 function updateHeader() {
     delay(100)
         .then(() => {
-            document.querySelector('.header').setAttribute('style', 'background-color: coral')
+            document.querySelector('.header').setAttribute('style', 'background-color: rgb(39, 157, 231)')
         })
         .then(() => {
-            document.getElementById('header-title').style.opacity = 1
+            document.getElementById('header-logo').style.opacity = 1
         });
     searchBar.blur();
 }
@@ -63,6 +63,7 @@ async function getApiLocationData(users_search) {
 //gathers all the object properties I want to use from the data loaded from the openweathermap API
 async function loadWeatherInformation() {
     const deg = '\u{00B0}'; //degrees in unicode
+    const weatherInfo = document.getElementById('weather-info');
 
     let getLocation = await getApiLocationData(searchBar.value)
         .then((data) => console.log(`${data.name}`));
@@ -76,7 +77,14 @@ async function loadWeatherInformation() {
     let getHumidity = await getApiLocationData(searchBar.value)
         .then((data) => console.log(`Humidity: ${data.main.humidity}`));
 
+    weatherInfo.setAttribute('style',
+        `display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto 1fr repeat(2, auto);
+        height: 70vh;
+        width: 30rem;
+        background-color: red;`)
 };
 
 //plays while waiting for loadWeatherInformation() to finish gathering all the date, and stops AFTER the information is returned
-async function playLoadingAnimation() {}
+async function playLoadingAnimation() { }
