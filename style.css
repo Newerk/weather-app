@@ -16,7 +16,7 @@ body {
 }
 
 /* will unhide once a location is searched*/
-#header-logo {    
+#header-logo {
     opacity: 0;
     transition: 400ms;
     height: 32px;
@@ -38,9 +38,11 @@ body {
     grid-column: 3;
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
-    margin-left: 22rem;
+    width: 3.5rem;
+    height: 2rem;
+    border: 3px solid black;
+    border-radius: 1rem;
+    /* margin-left: 24rem; */
 }
 
 /* Hide default HTML checkbox */
@@ -54,6 +56,9 @@ body {
     display: flex;
     width: 100%;
     justify-content: center;
+    place-self: center;
+    position: relative;
+    top: 16rem
 }
 
 #search-bar {
@@ -63,7 +68,6 @@ body {
     padding-left: 1rem;
     padding-right: 2rem;
     border-style: double;
-    margin-left: 4rem;
     place-self: middle;
 
 }
@@ -73,6 +77,7 @@ body {
     content: url(assets/search.svg);
     display: inline-block;
     left: -2rem;
+    margin-right: -2rem;
     top: .25rem;
     height: 1.2rem;
     width: 1.2rem;
@@ -83,7 +88,7 @@ body {
     height: 1.85rem;
     position: absolute;
     z-index: 1;
-    margin-left: 20.4rem;
+    margin-right: -18.5rem;
     border-radius: 0 1rem 1rem 0;
     cursor: pointer;
     background-color: rgba(83, 29, 29, 0);
@@ -97,14 +102,13 @@ h2 {
     visibility: visible;
 }
 
-.switch {
-    width: 4rem;
-    border: 3px solid black;
-    border-radius: 1rem;
-}
-
 .reposition {
-    transform: translateY(-5.45rem);
+    transform: translateY(-17rem);
     transition: 400ms cubic-bezier(0.215, 0.610, 0.355, 1);
 
+}
+
+#api-location {
+    grid-row: 1;
+    font-size: 3rem;
 }

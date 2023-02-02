@@ -66,7 +66,7 @@ async function loadWeatherInformation() {
     const weatherInfo = document.getElementById('weather-info');
 
     let getLocation = await getApiLocationData(searchBar.value)
-        .then((data) => console.log(`${data.name}`));
+        .then((data) => data.name);
 
     let getTemp = await getApiLocationData(searchBar.value)
         .then((data) => console.log(`Temperature is: ${data.main.temp}${deg}`));
@@ -77,13 +77,21 @@ async function loadWeatherInformation() {
     let getHumidity = await getApiLocationData(searchBar.value)
         .then((data) => console.log(`Humidity: ${data.main.humidity}`));
 
+        const location = document.createElement('div');
+        location.id = 'api-location';
+        location.textContent = getLocation;
+    
+        content.append(location);
+    
     weatherInfo.setAttribute('style',
         `display: grid;
+        grid-row: 2;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: auto 1fr repeat(2, auto);
         height: 70vh;
         width: 30rem;
-        background-color: red;`)
+        background-color: red;`);
+
 };
 
 //plays while waiting for loadWeatherInformation() to finish gathering all the date, and stops AFTER the information is returned
