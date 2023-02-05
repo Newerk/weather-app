@@ -68,31 +68,106 @@ async function loadWeatherInformation() {
     let getLocation = await getApiLocationData(searchBar.value)
         .then((data) => data.name);
 
+    let getIconURL = await getApiLocationData(searchBar.value)
+        .then(data => {
+            switch (data.weather[0].description) {
+                case 'clear sky':
+                    return getImgURL('01');
+
+                case 'few clouds':
+                    return getImgURL('02');
+
+
+                case 'scattered clouds':
+                    return getImgURL('03');
+
+
+                case 'broken clouds':
+                    return getImgURL('04');
+
+                case 'overcast clouds':
+                    return getImgURL('04');
+
+
+                case 'shower rain':
+                    return getImgURL('09');
+
+
+                case 'rain':
+                    return getImgURL('10');
+
+
+                case 'thunderstorm':
+                    return getImgURL('11');
+
+
+                case 'snow':
+                    return getImgURL('13');
+
+
+                case 'mist':
+                    return getImgURL('50');
+            }
+
+        })
+
     let getTemp = await getApiLocationData(searchBar.value)
-        .then((data) => console.log(`Temperature is: ${data.main.temp}${deg}`));
+        .then((data) => `${data.main.temp}${deg}`);
 
     let getFeelsLike = await getApiLocationData(searchBar.value)
-        .then((data) => console.log(`Feels like: ${data.main.feels_like}${deg}`));
+        .then((data) => `Feels like ${data.main.feels_like}${deg}`);
 
     let getHumidity = await getApiLocationData(searchBar.value)
-        .then((data) => console.log(`Humidity: ${data.main.humidity}`));
+        .then((data) => `Humidity: ${data.main.humidity}`);
 
-        const location = document.createElement('div');
-        location.id = 'api-location';
-        location.textContent = getLocation;
-    
-        content.append(location);
-    
+
+    const location = document.createElement('div');
+    location.id = 'api-location';
+    location.textContent = getLocation;
+
+    content.append(location);
+
     weatherInfo.setAttribute('style',
         `display: grid;
         grid-row: 2;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: auto 1fr repeat(2, auto);
+        grid-template-rows: auto 1fr repeat(3, auto);
         height: 70vh;
         width: 30rem;
-        background-color: red;`);
+        // background-color: red;
+        place-self: center;
+        `);
+
+    const icon = document.createElement('img');
+    icon.id = 'icon';
+    icon.src = getIconURL;
+
+    const temp = document.createElement('div');
+    temp.id = 'temp';
+    temp.textContent = getTemp;
+
+    const feelsLike = document.createElement('div');
+    feelsLike.id = 'feels-like';
+    feelsLike.textContent = getFeelsLike;
+
+    const humidity = document.createElement('div');
+    humidity.id = 'humidity';
+    humidity.textContent = getHumidity;
+
+
+    weatherInfo.append(icon, temp, feelsLike, humidity);
+
 
 };
+
+async function getImgURL(img) {
+    return `http://openweathermap.org/img/wn/${img}d@2x.png`;
+}
+
+function wipeWeatherInfo() {
+    document.querySelectorAll('.content').forEach(el => el.remove());
+
+}
 
 //plays while waiting for loadWeatherInformation() to finish gathering all the date, and stops AFTER the information is returned
 async function playLoadingAnimation() { }
