@@ -3,7 +3,8 @@
 const searchWrapper = document.querySelector('.search');
 const searchBar = document.getElementById('search-bar');
 const searchBtn = document.getElementById('search-btn');
-
+const weatherInfo = document.getElementById('weather-info');
+const apiLocation = document.getElementById('api-location');
 const content = document.querySelector('.content');
 
 const delay = (time) => {
@@ -19,7 +20,7 @@ searchBar.addEventListener('click', () => {
 searchBtn.addEventListener('click', (e) => {
     if (searchBar.value !== "" && searchBar.value !== "Search Location") {
         updateContentArea();
-        console.log(getApiLocationData(searchBar.value).then(loadWeatherInformation()))
+        getApiLocationData(searchBar.value).then(loadWeatherInformation())
 
     }
 })
@@ -27,7 +28,7 @@ searchBtn.addEventListener('click', (e) => {
 searchBar.addEventListener('keypress', e => {
     if (e.key === 'Enter') {
         updateContentArea();
-        console.log(getApiLocationData(searchBar.value).then(loadWeatherInformation()))
+        getApiLocationData(searchBar.value).then(loadWeatherInformation())
 
     }
 })
@@ -62,67 +63,66 @@ async function getApiLocationData(users_search) {
 
 //gathers all the object properties I want to use from the data loaded from the openweathermap API
 async function loadWeatherInformation() {
+    wipeWeatherInfo();
+
     const deg = '\u{00B0}'; //degrees in unicode
-    const weatherInfo = document.getElementById('weather-info');
 
-    let getLocation = await getApiLocationData(searchBar.value)
-        .then((data) => data.name);
-
-    let getIconURL = await getApiLocationData(searchBar.value)
-        .then(data => `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
-
-    let getTemp = await getApiLocationData(searchBar.value)
-        .then((data) => `${parseInt(data.main.temp)}${deg}`);
-
-    let getFeelsLike = await getApiLocationData(searchBar.value)
-        .then((data) => `Feels like ${parseInt(data.main.feels_like)}${deg}`);
-
-    let getHumidity = await getApiLocationData(searchBar.value)
-        .then((data) => `Humidity: ${data.main.humidity}`);
+    try {
 
 
-    const location = document.createElement('div');
-    location.id = 'api-location';
-    location.textContent = getLocation;
+        let getLocation = await getApiLocationData(searchBar.value)
+            .then((data) => data.name);
 
-    content.append(location);
+        let getIconURL = await getApiLocationData(searchBar.value)
+            .then(data => `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
 
-    weatherInfo.setAttribute('style',
-        `display: grid;
-        grid-row: 2;
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: auto 1fr repeat(3, auto);
-        height: 70vh;
-        width: 30rem;
-        // background-color: red;
-        place-self: center;
-        `);
+        let getTemp = await getApiLocationData(searchBar.value)
+            .then((data) => `${parseInt(data.main.temp)}${deg}F`);
 
-    const icon = document.createElement('img');
-    icon.id = 'icon';
-    icon.src = getIconURL;
+        let getFeelsLike = await getApiLocationData(searchBar.value)
+            .then((data) => `Feels like ${parseInt(data.main.feels_like)}${deg}F`);
 
-    const temp = document.createElement('div');
-    temp.id = 'temp';
-    temp.textContent = getTemp;
-
-    const feelsLike = document.createElement('div');
-    feelsLike.id = 'feels-like';
-    feelsLike.textContent = getFeelsLike;
-
-    const humidity = document.createElement('div');
-    humidity.id = 'humidity';
-    humidity.textContent = getHumidity;
+        let getHumidity = await getApiLocationData(searchBar.value)
+            .then((data) => `Humidity: ${data.main.humidity}%`);
 
 
-    weatherInfo.append(icon, temp, feelsLike, humidity);
+        const location = document.createElement('div');
+        location.id = 'location';
+        location.textContent = getLocation;
 
+        apiLocation.append(location);
+
+        const icon = document.createElement('img');
+        icon.id = 'icon';
+        icon.src = getIconURL;
+
+        const temp = document.createElement('div');
+        temp.id = 'temp';
+        temp.textContent = getTemp;
+
+        const feelsLike = document.createElement('div');
+        feelsLike.id = 'feels-like';
+        feelsLike.textContent = getFeelsLike;
+
+        const humidity = document.createElement('div');
+        humidity.id = 'humidity';
+        humidity.textContent = getHumidity;
+
+
+        weatherInfo.append(icon, temp, feelsLike, humidity);
+
+    } catch {
+        const location = document.getElementById('api-location');
+        location.textContent = 'Please enter a valid geographical location';
+        location.style.fontSize = '1rem';
+        apiLocation.append(location);
+    }
 
 };
 
 function wipeWeatherInfo() {
-    document.querySelectorAll('.content').forEach(el => el.remove());
-
+    weatherInfo.innerHTML = '';
+    apiLocation.innerHTML = '';
 }
 
 //plays while waiting for loadWeatherInformation() to finish gathering all the date, and stops AFTER the information is returned
