@@ -69,53 +69,13 @@ async function loadWeatherInformation() {
         .then((data) => data.name);
 
     let getIconURL = await getApiLocationData(searchBar.value)
-        .then(data => {
-            switch (data.weather[0].description) {
-                case 'clear sky':
-                    return getImgURL('01');
-
-                case 'few clouds':
-                    return getImgURL('02');
-
-
-                case 'scattered clouds':
-                    return getImgURL('03');
-
-
-                case 'broken clouds':
-                    return getImgURL('04');
-
-                case 'overcast clouds':
-                    return getImgURL('04');
-
-
-                case 'shower rain':
-                    return getImgURL('09');
-
-
-                case 'rain':
-                    return getImgURL('10');
-
-
-                case 'thunderstorm':
-                    return getImgURL('11');
-
-
-                case 'snow':
-                    return getImgURL('13');
-
-
-                case 'mist':
-                    return getImgURL('50');
-            }
-
-        })
+        .then(data => `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
 
     let getTemp = await getApiLocationData(searchBar.value)
-        .then((data) => `${data.main.temp}${deg}`);
+        .then((data) => `${parseInt(data.main.temp)}${deg}`);
 
     let getFeelsLike = await getApiLocationData(searchBar.value)
-        .then((data) => `Feels like ${data.main.feels_like}${deg}`);
+        .then((data) => `Feels like ${parseInt(data.main.feels_like)}${deg}`);
 
     let getHumidity = await getApiLocationData(searchBar.value)
         .then((data) => `Humidity: ${data.main.humidity}`);
@@ -159,10 +119,6 @@ async function loadWeatherInformation() {
 
 
 };
-
-async function getImgURL(img) {
-    return `http://openweathermap.org/img/wn/${img}d@2x.png`;
-}
 
 function wipeWeatherInfo() {
     document.querySelectorAll('.content').forEach(el => el.remove());
