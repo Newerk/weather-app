@@ -143,11 +143,12 @@ h2 {
 }
 
 #weather-info {
-    margin-top: -15rem;
+    position: absolute;
+    top: 8rem;
     display: grid;
     grid-row: 2;
     grid-template-columns: 10rem auto;
     grid-template-rows: auto auto repeat(2, 1.5rem);
-    height: 40vh;
+    height: auto;
     place-self: center;
 }
